@@ -23,17 +23,27 @@ library(neuralnet)
 set.seed(1234)
 
 nn <- neuralnet(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked,
-                data = df_train, hidden = c(6,3), linear.output = FALSE, threshold = 0.05, stepmax=1e+06)
+                data = df_train, hidden = c(6,3), threshold = 0.05, stepmax=1e+06,
+                learningrate = 0.001, linear.output = FALSE)
+
+plot(nn)
+
+# Badanie jakosci predykcji
+predictions <- predict(nn, newdata = df_train)
+binary_predictions <- ifelse(predictions >= 0.5, 1, 0)
+conf_mat <- table(binary_predictions, df_train$Survived)
+conf_mat
+accuracy <- sum(diag(conf_mat))/sum(conf_mat)
+precision <- conf_mat[2,2]/sum(conf_mat[,2])
+recall <- conf_mat[2,2]/sum(conf_mat[2,])
+f1_score <- 2 * precision * recall / (precision + recall)
+cat("Accuracy:", accuracy, "\n")
+cat("Precision:", precision, "\n")
+cat("Recall:", recall, "\n")
+cat("F1 score:", f1_score, "\n")
 
 # Predykcja dla danych testowych
 df_new_data <- df_test[, c("Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Embarked")]
-
-df_new_data$Pclass <- as.numeric(df_new_data$Pclass)
-df_new_data$Sex <- ifelse(df_new_data$Sex == "male", 1, 0)
-df_new_data$Age <- as.numeric(df_new_data$Age)
-df_new_data$SibSp <- as.numeric(df_new_data$SibSp)
-df_new_data$Parch <- as.numeric(df_new_data$Parch)
-df_new_data$Fare <- as.numeric(df_new_data$Fare)
 
 # wylosowanie 5 indeksów obserwacji
 indices <- sample(nrow(df_test), 1)
