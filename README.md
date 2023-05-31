@@ -12,9 +12,6 @@ The repository contains the following files and folders:
 
     R/: A folder containing the implementation of neural networks in R using the neuralnet library.
     Python/: A folder containing the implementation of neural networks in Python using the scikit-learn library.
-    No-Libraries/: A folder containing self-implemented neural networks without using any libraries.
-    Sample-Programs/: A folder containing sample programs illustrating the functionality of neural networks (not authored by me).
-    LICENSE: A file containing information about the project's license.
     README.md: This file, providing an overview of the project.
 
 #Contributions
